@@ -1,13 +1,15 @@
 #! python3
-# scheduledWebComicDownloader - checks the websites of several web comics and automatically downloads the images if the comic was updated since the program’s last visit.
+# scheduledWebComicDownloader.py - checks the websites of several web comics and automatically downloads the images if the comic was updated since the program’s last visit.
 
 # Step1: start at 3028 and download until 3033
+# Step2: Store the id number of currently latest comic(e.g. 3033) in a text file
+# Step3: Check the 'Next' link. If it doesn't end with '#' then download new comics. Else there are no new comics 
 
 import requests, os, bs4
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-url = 'https://xkcd.com/3028/'                # starting url    
+url = 'https://xkcd.com/3032/'                # starting url    
 
 os.makedirs('xkcd', exist_ok=True)            # store comics in ./xkcd
 
@@ -34,6 +36,20 @@ while not url.endswith('#'):
         imageFile.close()
     # Get the Next button's url:
     nextLink = soup.select('a[rel="next"]')[0]
+    currentUrl = url
     url = 'https://xkcd.com' + nextLink.get('href')
+    # Last link is: ''https://xkcd.com#''
+
+# e.g. url = https://xkcd.com/3033/#
+# Remove '/' from the link to save the latest comic ID:
+currentUrl = currentUrl[:-1]
+# print(currentUrl)
+latestComicID = os.path.basename(currentUrl)
+# print(latestComicID)
+
+
+latestComicIDFile = open('latestComicID.txt', 'w')
+latestComicIDFile.write(latestComicID)
+latestComicIDFile.close()
 
 print('Done.')
