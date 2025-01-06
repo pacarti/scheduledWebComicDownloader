@@ -1,11 +1,6 @@
 #! python3
 # scheduledWebComicDownloader.py - checks the websites of several web comics and automatically downloads the images if the comic was updated since the program’s last visit.
 
-# Step1: start at 3028 and download until 3033
-# Step2: Store the id number of currently latest comic(e.g. 3033) in a text file
-# Step3: Check the 'Next' link. If it doesn't end with '#' then download new comics. Else there are no new comics 
-# ...
-# do also for Qwantz
 
 import requests, os, bs4, threading
 from pathlib import Path
