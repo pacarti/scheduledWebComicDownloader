@@ -26,6 +26,9 @@ def downloadXkcdComics():
         if nextLinkHref == '#':
             print("No new XKCD comics since last download. Exiting...")
             return 0
+        else:
+            # Last comic is downloaded so we are going to the next comic:
+            url = 'https://xkcd.com/' + str(int(latestComicID) + 1)
     else:
         # No file detected - never downloaded so downloading from the 1st comic
         url = 'https://xkcd.com/1/'
@@ -59,10 +62,6 @@ def downloadXkcdComics():
         url = 'https://xkcd.com' + nextLink.get('href')
         # Last link is: ''https://xkcd.com#''
 
-    # e.g. url = https://xkcd.com/3033/#
-    # Remove '/' from the link to save the latest comic ID:
-    currentUrl = currentUrl[:-1]
-
     latestComicID = os.path.basename(currentUrl)
 
 
@@ -92,9 +91,13 @@ def downloadQwantzComics():
             print("No new Qwantz comics since last download. Exiting...")
             exit()
 
+        # Last comic is downloaded so we are going to the next comic:
+        url = 'https://qwantz.com/index.php?comic=' + str(int(latestQwantzComicID) + 1)
+
     else:
         # No file detected - never downloaded so downloading from the 1st comic
         url = 'https://qwantz.com/index.php?comic=1'
+
 
     os.makedirs('qwantz', exist_ok=True)            # store comics in ./xkcd
 
@@ -142,6 +145,8 @@ def main():
 
     threadXkcd = threading.Thread(target=downloadXkcdComics)
     threadQwantz = threading.Thread(target=downloadQwantzComics)
+
+    # downloadXkcdComics()
 
     threadXkcd.start()
     threadQwantz.start()
